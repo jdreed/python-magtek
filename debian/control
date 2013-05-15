@@ -1,0 +1,14 @@
+Source: python-magtek
+Section: python
+Priority: extra
+Maintainer: Jonathan Reed <jdreed@mit.edu>
+Build-Depends: debhelper (>= 7.0.50~), python-support
+Standards-Version: 3.9.3
+
+Package: python-magtek
+Architecture: all
+Depends: ${misc:Depends}, ${python:Depends}
+Provides: ${python:Provides}
+Description: Python bindings for magtek USB readers
+ Provides a set of bindings for MagTek USB readers.  Note that this
+ requires pyusb 1.0, which is only available in pypi, not apt
