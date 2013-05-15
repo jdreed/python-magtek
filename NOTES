@@ -1,0 +1,17 @@
+Lessons learned during development:
+
+UDEV RULES:
+
+  udevadm info -q path -n /dev/hidraw0 will get you the syspath to the
+  device (/devices/whatever)
+  udevadm info -a -p /devices/whatever
+  will walk the tree from that device up and show you various things,
+  include the keys to match in the udev rule.  Note that sometimes the
+  key is plural (SUBSYSTEMS) and sometimes it's not.  Read carefully.
+
+  udevadm test /devices/whatever will show you what's getting done and
+  why
+  udevadm trigger will actually re-run the rules (as root).
+
+  Note that we need two rules, one for the raw USB device (which
+  prevents EACCESS libusb errors), and one for the actual HID device (hidraw0)
