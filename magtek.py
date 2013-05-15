@@ -165,11 +165,11 @@ class MagTek:
         if self._dev == None:
             raise MagTekException('Could not find MagTek reader')
 
-        if self._dev.is_kernel_driver_active(0):
-            try:
+        try:
+            if self._dev.is_kernel_driver_active(0):
                 self._dev.detach_kernel_driver(0)
-            except usb.core.USBError as e:
-                raise MagTekUSBException("Could not detach kernel driver (are you root?)", str(e))
+        except usb.core.USBError as e:
+            raise MagTekUSBException("Could not detach kernel driver (are you root?)", str(e))
         
         try:
             self._dev.set_configuration()
