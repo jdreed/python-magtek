@@ -1,0 +1,7 @@
+# This first rule deals with the USB device permissions
+# (e.g. to prevent libusb EACCESS errors)
+SUBSYSTEM=="usb",ATTRS{idVendor}=="0801",ATTRS{idProduct}=="000*",MODE="0666"
+# This second rule creates a symlink device only for HID-mode readers
+# and sets the mode on /dev/hidrawN
+SUBSYSTEM=="hidraw",ATTRS{idVendor}=="0801",ATTRS{idProduct}=="0002",MODE="0666",SYMLINK+="magtek-hid-reader%n"
+
