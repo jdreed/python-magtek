@@ -1,3 +1,16 @@
+python-magtek (1.2) unstable; urgency=low
+
+  * Handle conversion errors in track data
+  * Clear out the input pipe after reading
+
+ -- Jonathan Reed <jdreed@mit.edu>  Thu, 16 May 2013 17:10:14 -0400
+
+python-magtek (1.1) unstable; urgency=low
+
+  * Add udev rules
+
+ -- Jonathan Reed <jdreed@mit.edu>  Wed, 15 May 2013 15:58:48 -0400
+
 python-magtek (1.0) unstable; urgency=low
 
   * Initial release.

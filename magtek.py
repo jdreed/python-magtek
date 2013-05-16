@@ -77,12 +77,16 @@ class MagTekSwipeData:
         self.trackData = [byteString[7:116], byteString[117:226], byteString[227:336]]
 
     def __str__(self):
-        rv = "Card type: %s\n" % (self._cardTypes[self._cardType])
-        for i in (1, 2, 3):
-            rv += "Track %d Decode: %s\n" % (i, "Error" if self.trackDecodeStatus[i-1] else "OK")
-            rv += "Track %d Length: %d\n" % (i, self.trackLengths[i-1])
-            rv += "Track %d Raw Data: %s\n" % (i, self.trackData[i-1][0:self.trackLengths[i-1]].tolist())
-            rv += "Track %d String Data: %s\n" % (i, self.trackData[i-1][0:self.trackLengths[i-1]].tostring())
+        try:
+            rv = "Card type: %s\n" % (self._cardTypes[self._cardType])
+            for i in (1, 2, 3):
+                rv += "Track %d Decode: %s\n" % (i, "Error" if self.trackDecodeStatus[i-1] else "OK")
+                rv += "Track %d Length: %d\n" % (i, self.trackLengths[i-1])
+                rv += "Track %d Raw Data: %s\n" % (i, self.trackData[i-1][0:self.trackLengths[i-1]].tolist())
+                rv += "Track %d String Data: %s\n" % (i, self.trackData[i-1][0:self.trackLengths[i-1]].tostring())
+        except KeyError:
+            rv = "Exception occurred while formatting string (incomplete/bad swipe data)\n";
+            rv += "Raw array data: " + trackData.tolist()
         return rv
 
     def getTrack(self, trackNum):
@@ -233,6 +237,14 @@ class MagTek:
             except usb.core.USBError as e:
                 if e.args[0] != errno.ETIMEDOUT:
                     raise MagTekException(e)
+        # Flush the input, in case someone swipes twice, or there was stray swipe data
+        # There's probably a better way to deal with this
+        # But this avoids the problem of bad data (or limits it to one read)
+        try:
+            self._dev.read(self._endpoint.bEndpointAddress,
+                           self._endpoint.wMaxPacketSize)
+        except usb.core.USBError as e:
+            pass
         return MagTekSwipeData(cardData)
 
     def _send_command(self, cmdNum, data):
