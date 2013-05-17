@@ -1,3 +1,10 @@
+python-magtek (1.2.1) unstable; urgency=low
+
+  * Move udev rule to /lib/udev/rules.d
+  * Rename rule to package name
+
+ -- Jonathan Reed <jdreed@mit.edu>  Fri, 17 May 2013 09:17:41 -0400
+
 python-magtek (1.2) unstable; urgency=low
 
   * Handle conversion errors in track data
