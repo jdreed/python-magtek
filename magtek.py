@@ -217,6 +217,7 @@ class MagTek:
         self._send_command(0x02, [])
 
     def readCard(self, loopCallback=None):
+        # TODO: just return the data, make parsing a separate function
         # See pyusb docs for the subscript operators.  This device only
         # has one configuration, one interface, and one endpoint.  For
         # more complicated devices, you want usb.util.find_descriptor
