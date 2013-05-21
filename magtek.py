@@ -216,7 +216,7 @@ class MagTek:
         # This is not a usb reset() command, this reboots the device
         self._send_command(0x02, [])
 
-    def readCard(self, loopCallback=None):
+    def readCard(self, suppressTimeout=False, loopCallback=None):
         # TODO: just return the data, make parsing a separate function
         # See pyusb docs for the subscript operators.  This device only
         # has one configuration, one interface, and one endpoint.  For
@@ -238,6 +238,9 @@ class MagTek:
             except usb.core.USBError as e:
                 if e.args[0] != errno.ETIMEDOUT:
                     raise MagTekException(e)
+                else:
+                    if not suppressTimeout:
+                        return None
         # Flush the input, in case someone swipes twice, or there was stray swipe data
         # There's probably a better way to deal with this
         # But this avoids the problem of bad data (or limits it to one read)
