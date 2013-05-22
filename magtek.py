@@ -229,7 +229,7 @@ class MagTek:
         bytesRead = 0
         cardData = array.array('B')
         while bytesRead < INPUT_REPORT_SIZE:
-            if loopCallback is not None and loopCallback() != True:
+            if loopCallback is not None and loopCallback(bytesRead) != True:
                 return None
             try:
                 cardData += self._dev.read(self._endpoint.bEndpointAddress,
@@ -241,15 +241,17 @@ class MagTek:
                 else:
                     if not suppressTimeout:
                         return None
-        # Flush the input, in case someone swipes twice, or there was stray swipe data
-        # There's probably a better way to deal with this
-        # But this avoids the problem of bad data (or limits it to one read)
+        return MagTekSwipeData(cardData)
+
+    def _flush_input(self):
+        # Previously used in readCard in case someone swipes prior to reading
+        # Unneeded now, but keep around just in case
         try:
             self._dev.read(self._endpoint.bEndpointAddress,
                            self._endpoint.wMaxPacketSize)
         except usb.core.USBError as e:
-            pass
-        return MagTekSwipeData(cardData)
+            if e.args[0] != errno.ETIMEDOUT:
+                raise MagTekException(e)
 
     def _send_command(self, cmdNum, data):
         # Commands are sent in feature reports. Feature reports are

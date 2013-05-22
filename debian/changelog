@@ -1,3 +1,10 @@
+python-magtek (1.2.2) unstable; urgency=low
+
+  * Pass the number of bytes read to the callback
+  * Move the input flushing code to a private method for now
+
+ -- Jonathan Reed <jdreed@mit.edu>  Wed, 22 May 2013 14:21:22 -0400
+
 python-magtek (1.2.1) unstable; urgency=low
 
   * Move udev rule to /lib/udev/rules.d
